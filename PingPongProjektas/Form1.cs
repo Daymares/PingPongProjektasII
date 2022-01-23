@@ -16,8 +16,8 @@ namespace PingPongProjektas
         bool playerGoup; // zaidejas kyla
         bool playerGodown; // zaidejas leidziasi
         int speed = 5; // kokiu greiciu juda platforma
-        int xball = 5; // kamuolio x koordinate
-        int yball = 5; // kamuolio y koordinate
+        int xball = 8; // kamuolio greitis x asyje
+        int yball = 8; // kamuolio greitis y asyje
         int playerPoints = 0;
         int npcPoints = 0;
 
@@ -26,6 +26,8 @@ namespace PingPongProjektas
         public PingPong()
         {
             InitializeComponent();
+            //playerScore.BackColor = System.Drawing.Color.Transparent;  //neveikia
+            //npcScore.BackColor = System.Drawing.Color.Transparent; //neveikia irgi
 
         }
 
@@ -63,20 +65,6 @@ namespace PingPongProjektas
 
             npc.Top += speed;
 
-            //tasku sistema
-
-            if (playerPoints < 5)
-            {
-               if (npc.Top < 0 || npc.Top > 455)
-                {
-                    speed = -speed;
-                }
-            }
-            else
-            {
-                npc.Top = Ball.Top + 30;
-            }
-
             //kamuolys paliko ribas
 
             if (Ball.Left < 0)
@@ -95,20 +83,21 @@ namespace PingPongProjektas
                 playerPoints++;
             }
 
-            //kamuolio controls
-
-            if (Ball.Top < 0 || Ball.Top + Ball.Height > ClientSize.Height)
+            //tasku sistema
+            if (playerPoints < 5)
             {
-                yball = -yball;
+               if (npc.Top < 0 || npc.Top > 455)
+                {
+                    speed = -speed;
+                }
+            }
+            else
+            {
+                npc.Top = Ball.Top + 30; 
             }
 
-            if (Ball.Bounds.IntersectsWith(Player.Bounds) || Ball.Bounds.IntersectsWith(npc.Bounds))
-            {
-                xball = -xball;
-            }
 
             //zaidejo controls
-
             if (playerGoup == true && Player.Top > 0)
             {
                 Player.Top -= 8;
@@ -119,17 +108,27 @@ namespace PingPongProjektas
                 Player.Top += 8;
             }
 
+            //kamuolio controls
+            if (Ball.Top < 0 || Ball.Top + Ball.Height > ClientSize.Height)
+            {
+                yball = -yball;
+            }
+
+            if (Ball.Bounds.IntersectsWith(Player.Bounds) || Ball.Bounds.IntersectsWith(npc.Bounds))
+            {
+                xball = -xball;
+            }
 
             //rezultatai
             if (playerPoints > 10)
             {
                 gameTimer.Stop();
-                MessageBox.Show("You win!");
+                MessageBox.Show("You win.");
             }
             if (npcPoints > 10)
             {
                 gameTimer.Stop();
-                MessageBox.Show("NPC wins.");
+                MessageBox.Show("You lose.");
             }
         }
     }
